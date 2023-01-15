@@ -2,7 +2,6 @@ import time
 
 incio = time.time()
 
-
 def calculo_custo_rota(grafo, rota):
     custo_pcv = 0
     vertices = range(len(grafo))
