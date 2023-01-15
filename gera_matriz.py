@@ -1,6 +1,6 @@
 import random
 
-tam = 10
+tam = 6
 
 matriz = []
 
