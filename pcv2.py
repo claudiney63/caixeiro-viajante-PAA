@@ -3,6 +3,8 @@ import numpy as np
 
 incio = time.time()
 
+lista_rotas = {}
+
 def calculo_custo_rota(grafo, rota):
     custo_pcv = 0
     vertices = range(len(grafo))
@@ -25,6 +27,11 @@ def pcv_forca_bruta(grafo, rota=[0], melhor_custo=float("inf"), melhor_caminho=N
         rota.append(0)
         custo_final = calculo_custo_rota(grafo, rota)
         # print("Rota: ", rota)
+        rota_aux = []
+        for i in rota:
+            rota_aux.append(i)
+
+        lista_rotas[custo_final] = rota_aux
         # print("Custo Final: ", custo_final)
         # print("")
 
@@ -112,20 +119,38 @@ if __name__ == '__main__':
     #           [1, 60, 10, 83, 81, 22, 35, 17, 62, 20, 6]]
 
 
-    pcv_real = pcv_forca_bruta(graph2) #gera a rota e peso minimo (real)
+    grafo = graph2
 
-    graph_priori = escolher_priori(graph2, 3)
+    pcv_real = pcv_forca_bruta(grafo) #gera a rota e peso minimo (real)
+    print(lista_rotas)
+    rotas_reais = lista_rotas
+
+    graph_priori = escolher_priori(grafo, 3)
     pcv_priori = encontra_priori(graph_priori) #gera a rota e peso minimo (prioritario)
 
     custo_minimo_priori = pcv_priori[0]
     rota_escolhida = pcv_priori[1]
 
-    #FALTA COMPACTUAR A ROTA DO PRIORITARIO E PEGAR O CUSTO MINIMO FINAL REAL DENTRO DA MATRIZ ORIGINAL
+    # rota_priori = []
+    # custo_final_real = 0
 
-    print(f'Custo Minimo (real): {pcv_real[0]}')
+    # for i in rotas_reais:
+    #     a1 = np.array(rotas_reais[i])
+    #     a2 = np.array(rota_escolhida)
+    #     if(np.array_equal(a1, a2)):
+    #         rota_priori = a1
+    #         custo_final_real = i
+
+    
+
+    print(f'\nCusto Minimo (real): {pcv_real[0]}')
     print(f'Rota: {pcv_real[1]}')
-    print(f'\nCusto Minimo (prioridade): {custo_minimo_priori} e {pcv_real[0]}')
+
+    # print(f'\nCusto Minimo (real): {custo_final_real}')
+    # print(f'Rota: {rota_priori}')
+
+    print(f'\nCusto Minimo (prioridade): {custo_minimo_priori}')
     print(f'Rota: {rota_escolhida}')
 
     fim = time.time() - incio
-    print(f'Tempo de final: {fim:.5f} ms')
+    print(f'\nTempo de final: {fim:.5f} ms')
