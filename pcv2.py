@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
     pcv_real = pcv_forca_bruta(grafo) #gera a rota e peso minimo (real)
     print(lista_rotas)
-    rotas_reais = lista_rotas
+    rotas_reais = lista_rotas.copy()
 
     graph_priori = escolher_priori(grafo, 3)
     pcv_priori = encontra_priori(graph_priori) #gera a rota e peso minimo (prioritario)
@@ -131,23 +131,19 @@ if __name__ == '__main__':
     custo_minimo_priori = pcv_priori[0]
     rota_escolhida = pcv_priori[1]
 
-    # rota_priori = []
-    # custo_final_real = 0
+    rota_priori = []
+    custo_final_real = 0
 
-    # for i in rotas_reais:
-    #     a1 = np.array(rotas_reais[i])
-    #     a2 = np.array(rota_escolhida)
-    #     if(np.array_equal(a1, a2)):
-    #         rota_priori = a1
-    #         custo_final_real = i
-
-    
+    for i in rotas_reais:
+        if(rotas_reais[i] == rota_escolhida):
+            rota_priori = rota_escolhida
+            custo_final_real = i
 
     print(f'\nCusto Minimo (real): {pcv_real[0]}')
     print(f'Rota: {pcv_real[1]}')
 
-    # print(f'\nCusto Minimo (real): {custo_final_real}')
-    # print(f'Rota: {rota_priori}')
+    print(f'\nCusto Minimo (real): {custo_final_real}')
+    print(f'Rota: {rota_priori}')
 
     print(f'\nCusto Minimo (prioridade): {custo_minimo_priori}')
     print(f'Rota: {rota_escolhida}')
