@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import networkx as nx
+import time
+
+incio = time.time()
 
 rotas = []
 
@@ -100,3 +103,5 @@ if __name__ == '__main__':
         print("ERROR!")
 
     print(f'Custo e Rota com Prioridade: {rotas[prioridade][0], rotas[prioridade][1]}')
+    fim = time.time() - incio
+    print(f'\nTempo de final: {fim:.5f} ms com N = {len(focos)}')
