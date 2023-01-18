@@ -44,11 +44,11 @@ def pcv_forca_bruta(grafo, rota=[0], melhor_custo=float("inf"), melhor_caminho=N
         return melhor_custo, melhor_caminho
 
     # Etapa Recursiva
-    for node in range(len(grafo)):
-        if node in rota:
+    for inicio in range(len(grafo)):
+        if inicio in rota:
             continue
 
-        rota.append(node)
+        rota.append(inicio)
 
         melhor_custo, melhor_caminho = pcv_forca_bruta(
             grafo, rota, melhor_custo, melhor_caminho)
