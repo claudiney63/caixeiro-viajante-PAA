@@ -1,5 +1,8 @@
 import heapq
 import exemlos as ex
+import time
+
+incio = time.time()
 
 def dijkstra_caminho_curto(graph, start, end):
     distancias = {node: float('inf') for node in graph}
@@ -57,7 +60,7 @@ def heuristica(graph, start, priori):
             dist=float('inf')
             for ct in cities:
                 peso, caminho = dijkstra_caminho_curto(graph, noatual, ct)
-                
+
                 if peso<dist:
                     dist=peso
                     caminho=caminho
@@ -101,5 +104,8 @@ if __name__ == "__main__":
 
     peso, caminho = heuristica(ex.focos4, 'RV', 'Z')
 
+    fim = time.time() - incio
+
     print(f'Peso: {peso}')
     print(f'Caminho Percorrido: {caminho}')
+    print(f'\nTempo de final: {fim:.5f} ms com N = {len(ex.focos4)}')
