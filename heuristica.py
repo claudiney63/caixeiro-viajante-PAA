@@ -1,28 +1,29 @@
 import heapq
+import exemlos as ex
 
-def dijkstra_shortest_path(graph, start, end):
-    distances = {node: float('inf') for node in graph}
+def dijkstra_caminho_curto(graph, start, end):
+    distancias = {node: float('inf') for node in graph}
 
-    previous = {node: None for node in graph}
-    distances[start] = 0    
+    previa = {node: None for node in graph}
+    distancias[start] = 0    
 
     queue = [(0, start)]
 
     while queue:
-        current_distance, current_node = heapq.heappop(queue)
+        distancia_atual, node_atual = heapq.heappop(queue)
 
-        if current_node == end:
-            path = []
-            while current_node is not None:
-                path.append(current_node)
-                current_node = previous[current_node]
-            return current_distance, list(reversed(path))
+        if node_atual == end:
+            caminho = []
+            while node_atual is not None:
+                caminho.append(node_atual)
+                node_atual = previa[node_atual]
+            return distancia_atual, list(reversed(caminho))
 
-        for neighbor, weight in graph[current_node].items():
-            distance = current_distance + weight
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
-                previous[neighbor] = current_node
+        for neighbor, weight in graph[node_atual].items():
+            distance = distancia_atual + weight
+            if distance < distancias[neighbor]:
+                distancias[neighbor] = distance
+                previa[neighbor] = node_atual
                 heapq.heappush(queue, (distance, neighbor))
 
     return float('inf'), []
@@ -30,13 +31,15 @@ def dijkstra_shortest_path(graph, start, end):
 def heuristica(graph, start, priori):
     caminhofinal=[]
     pesofinal=0
-    peso, caminho = dijkstra_shortest_path(graph, start, priori)
+    peso, caminho = dijkstra_caminho_curto(graph, start, priori)
     caminhofinal.append(caminho)
     pesofinal+=peso
-    for ca in caminho:
+
+    for ca in caminho: #remove os vertices ja percorridos
         if ca in cities:
             cities.remove(ca)
-    while(cities!=[]):
+
+    while(cities!=[]): #continua ate a lista de vertices não percorridos não ser vazia
         noatual=caminho[-1]
 
         cont=0
@@ -50,76 +53,53 @@ def heuristica(graph, start, priori):
                             atual=graph[i][j]
                             atualkey=j
                             cont+=1
-
         if cont==0:
             dist=float('inf')
             for ct in cities:
-                peso, caminho = dijkstra_shortest_path(graph, noatual, ct)
+                peso, caminho = dijkstra_caminho_curto(graph, noatual, ct)
+                
                 if peso<dist:
                     dist=peso
-                    path=caminho
-            cities.remove(path[-1])
-            noatual=path[-1]
-            caminhofinal.append(path)
-            pesofinal+=peso
-        else:
-            peso,caminho = dijkstra_shortest_path(graph, noatual, atualkey)
+                    caminho=caminho
+
             cities.remove(caminho[-1])
             noatual=caminho[-1]
             caminhofinal.append(caminho)
             pesofinal+=peso
 
-    peso, caminho = dijkstra_shortest_path(graph,noatual,start)
-    caminhofinal.append(caminho)
-    pesofinal+=peso
+        else:
+            peso,caminho = dijkstra_caminho_curto(graph, noatual, atualkey)
+            cities.remove(caminho[-1])
+            noatual=caminho[-1]
+            caminhofinal.append(caminho)
+            pesofinal+=peso
 
-    print(pesofinal)
-    listaprint=[]
+    peso, caminho = dijkstra_caminho_curto(graph, noatual, start)
+    caminhofinal.append(caminho)
+    pesofinal += peso
+
+    # print(pesofinal)
+    listaprint = []
     for i in range(len(caminhofinal)):
         if i!=len(caminhofinal)-1:
             for j in range (len(caminhofinal[i])-1):
                 listaprint.append(caminhofinal[i][j])
+
         else:
             for j in range(len(caminhofinal[i])):
                 listaprint.append(caminhofinal[i][j])
-    print(listaprint)
+    # print(listaprint)
+
+    return pesofinal, listaprint
 
 if __name__ == "__main__":
 
     cities = []
 
-    focos3 = {
-            'RV': {'S': 195, 'UL': 86, 'M': 178},
-            'UL': {'RV': 86, 'S': 107, 'N': 171, 'M': 123},
-            'M': {'RV': 178, 'UL': 123, 'N': 170},
-            'S': {'RV': 195, 'UL': 107, 'N': 210, 'F': 210},
-            'N': {'S': 210, 'UL': 171, 'M': 170, 'F': 230},
-            'F': {'N': 230, 'S': 210},
-        }
-    
-    focos4 = {
-        'RV': {'S': 195, 'UL': 86, 'M': 178, 'BA': 180, 'Z': 91,'PS': 95, 'NF': 98},
-        'UL': {'RV': 86, 'S': 107, 'N': 171, 'M': 123},
-        'M': {'RV': 178, 'UL': 123, 'N': 170, 'PS': 112,'LA': 61},
-        'S': {'RV': 195, 'UL': 107, 'N': 210, 'F': 210, 'MA': 135, 'KA': 64,'NF': 77},
-        'N': {'S': 210, 'UL': 171, 'M': 170, 'MA': 230, 'F': 230, 'TI': 97, 'LA': 77},
-        'F': {'N': 230, 'S': 210, 'MA': 85},
-        'MA': {'F': 85, 'N': 230, 'S': 135, 'KA': 67,'TI': 55},
-        'KA': {'MA': 67, 'S': 64, 'BA': 191, 'PS': 66,'TI': 64,'NF': 56},
-        'BA': {'KA': 191, 'RV': 180, 'Z': 85, 'BE': 91},
-        'BE': {'BA': 91, 'Z': 120, 'PS': 81},
-        'Z': {'BA': 120, 'BE': 85, 'RV': 91},
-        'PS': {'RV': 95, 'M': 112, 'KA': 66, 'BE': 81,'LA': 59},
-        'TI': {'N': 97,'MA': 55,'KA': 64,'LA': 85},
-        'NF': {'S':77 ,'RV': 98,'KA': 56},
-        'LA': {'TI': 85,'N': 77,'M': 61,'PS': 59}
-    }
-    
-    for c in focos4:
+    for c in ex.focos4:
         cities.append(c)
 
-    heuristica(focos4, 'RV', 'Z')
+    peso, caminho = heuristica(ex.focos4, 'RV', 'Z')
 
-    # distance, path = dijkstra_shortest_path(focos3, 'RV', 'F')
-    # print(distance)  # 5
-    # print(path)  # ['A', 'C', 'D']
+    print(f'Peso: {peso}')
+    print(f'Caminho Percorrido: {caminho}')
