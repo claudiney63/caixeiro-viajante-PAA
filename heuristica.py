@@ -108,4 +108,4 @@ if __name__ == "__main__":
 
     print(f'Peso: {peso}')
     print(f'Caminho Percorrido: {caminho}')
-    print(f'\nTempo de final: {fim:.5f} ms com N = {len(ex.focos4)}')
+    print(f'\nTempo de final: {fim:.8f} ms com N = {len(ex.focos4)}')
