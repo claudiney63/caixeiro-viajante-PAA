@@ -121,10 +121,8 @@ if __name__ == '__main__':
         'NF': {'S':77 ,'RV': 98,'KA': 56},
         'LA': {'TI': 85,'N': 77,'M': 61,'PS': 59}
     }
-    
-    
 
-    formar_grafo(focos4)
+    # formar_grafo(focos4)
 
     encnontrar_caminhos('RV', focos4, [], 0)
     print("\n")
